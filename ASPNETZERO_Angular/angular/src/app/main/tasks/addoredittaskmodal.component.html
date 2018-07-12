@@ -1,0 +1,54 @@
+
+<div bsModal
+     #createOrEditModal="bs-modal"
+     class="modal fade"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="createOrEditModal"
+     aria-hidden="true"
+     [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form *ngIf="active" #taskForm="ngForm" novalidate (ngSubmit)="save()" autocomplete="off">
+
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span *ngIf="task.id">{{l("Edit Task")}}: {{task.title}}</span>
+                        <span *ngIf="!task.id">{{l("Create New Task")}}</span>
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input type="text" name="title" class="form-control" [ngClass]="{'edited':task.title}" [(ngModel)]="task.title" required maxlength="256">
+                                <label>{{l("Title")}}</label>
+                            </div>
+
+                            <div class="form-group form-md-line-input form-md-floating-label no-hint">
+                                <input type="text" name="description" class="form-control" [ngClass]="{'edited':task.description}" [(ngModel)]="task.description" maxlength="65536">
+                                <label>{{l("Description")}}</label>
+                            </div>
+                            <div>
+                                <label>{{l("State")}}</label>
+                                <select name="taskState" class="form-control" [(ngModel)]="task.state">
+                                    <option *ngFor="let option of stateSelectOptions" [ngValue]="option.value">{{option.text}}</option>
+                                </select>
+                            </div>
+                           
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button [disabled]="saving" type="button" class="btn btn-default" (click)="close()"> {{l("Cancel")}}</button>
+                    <button type="submit" class="btn btn-primary blue" [disabled]="!taskForm.form.valid" [buttonBusy]="saving" [busyText]="l('SavingWithThreeDot')"> <i class="fa fa-save"></i> <span>{{l("Save")}}</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
